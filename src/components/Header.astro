@@ -1,18 +1,26 @@
 ---
 import { SITE_TITLE } from '../consts';
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
 import HeaderLink from './HeaderLink.astro';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const base = lang === 'en' ? '/en' : '';
+const altHref = lang === 'en' ? '/' : '/en/';
+const altLabel = lang === 'en' ? 'JA' : 'EN';
 ---
 
 <header>
 	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
+		<h2><a href={`${base}/`}>{SITE_TITLE}</a></h2>
 		<div class="internal-links">
-			<HeaderLink href="/">トップ</HeaderLink>
-			<HeaderLink href="/blog">記事</HeaderLink>
-			<HeaderLink href="/about">ゆかについて</HeaderLink>
+			<HeaderLink href={`${base}/`}>{t('nav.home')}</HeaderLink>
+			<HeaderLink href={`${base}/blog`}>{t('nav.blog')}</HeaderLink>
+			<HeaderLink href={`${base}/about`}>{t('nav.about')}</HeaderLink>
 		</div>
-		<div class="social-links">
-			<a href="https://x.com/yuka_picks" target="_blank">
+		<div class="right-links">
+			<a href={altHref} class="lang-switch">{altLabel}</a>
+			<a href="https://x.com/yuka_picks" target="_blank" class="x-icon">
 				<span class="sr-only">X (@yuka_picks)</span>
 				<svg viewBox="0 0 16 16" aria-hidden="true" width="24" height="24"
 					><path
@@ -65,22 +73,33 @@ import HeaderLink from './HeaderLink.astro';
 		color: rgb(var(--text));
 		border-bottom-color: var(--accent);
 	}
-	.social-links,
-	.social-links a {
+	.right-links {
 		display: flex;
 		align-items: center;
 	}
-	.social-links a {
+	.right-links a {
+		display: flex;
+		align-items: center;
 		color: rgb(var(--text-muted));
 		padding: 0.5em;
 		transition: color 0.15s;
 	}
-	.social-links a:hover {
+	.right-links a:hover {
 		color: var(--accent);
 		filter: none;
 	}
+	.lang-switch {
+		font-size: 0.75em;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		border: 1px solid rgb(var(--border));
+		border-radius: 4px;
+		padding: 0.25em 0.55em !important;
+		margin-right: 0.3em;
+		line-height: 1;
+	}
 	@media (max-width: 720px) {
-		.social-links {
+		.x-icon {
 			display: none;
 		}
 	}
